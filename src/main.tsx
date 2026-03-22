@@ -1,24 +1,33 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css'
-import "@solana/wallet-adapter-react-ui/styles.css";
-import App from './App.tsx'
-import WalletContextProvider from './contexts/WalletContext'
+import './index.css';
+import '@solana/wallet-adapter-react-ui/styles.css';
+import App from './App.tsx';
+import WalletContextProvider from './contexts/WalletContext';
 
 import { Buffer } from 'buffer';
+import process from 'process';
+
+declare global {
+  interface Window {
+    Buffer: typeof Buffer;
+    process: typeof process;
+  }
+}
+
 window.Buffer = Buffer;
+window.process = process;
 
-
-import { WagmiProvider } from "wagmi";
-import { mainnet, sepolia, bsc, bscTestnet } from "wagmi/chains";
-import { getDefaultConfig, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from 'wagmi';
+import { mainnet, sepolia, bsc, bscTestnet } from 'wagmi/chains';
+import { getDefaultConfig, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   metaMaskWallet,
   trustWallet,
   coinbaseWallet,
-  walletConnectWallet
+  walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 
 const config = getDefaultConfig({
@@ -30,12 +39,7 @@ const config = getDefaultConfig({
       wallets: [metaMaskWallet, trustWallet, coinbaseWallet, walletConnectWallet],
     },
   ],
-  chains: [
-    mainnet,
-    sepolia,
-    bsc,
-    bscTestnet
-  ],
+  chains: [mainnet, sepolia, bsc, bscTestnet],
   ssr: true,
 });
 
@@ -65,5 +69,5 @@ createRoot(document.getElementById('root')!).render(
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);
