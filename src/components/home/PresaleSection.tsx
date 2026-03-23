@@ -203,6 +203,7 @@ const PresaleSection = () => {
 
     // Fetch Solana chain data
     const fetchSolanaData = useCallback(async () => {
+
         try {
             const connection = new Connection(
                 config.isMainnet ? config.mainNetRpcUrl : config.devNetRpcUrl,
@@ -225,6 +226,12 @@ const PresaleSection = () => {
                     ],
                     program.programId
                 );
+                console.log("Program ID:", program.programId.toBase58());
+                console.log("Authority:", PRESALE_AUTHORITY.toBase58());
+                console.log("Seed:", PRESALE_SEED);
+                console.log("Presale ID:", PRESALE_ID);
+
+                console.log("Derived PDA:", presale_info.toBase58());
                 const info: any = await program.account.presaleInfo.fetch(presale_info);
 
                 if (info.soldTokenAmount) {
