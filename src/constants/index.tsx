@@ -15,7 +15,7 @@ export const VAULT_SEED = "PATOS_VAULT_SEED";
 export const PRESALE_ID = 2;
 
 export const PRESALE_AUTHORITY = new PublicKey(
-  "8qEfz9ii5AfpamwKJc7pfX5Tmdn6JJ1GHLoXdUhqaFeJ"
+  "CXcd8wTQbLKMDbcbMbCHsggwngpQfKndFSpUVgzhfFvh"//8qEfz9ii5AfpamwKJc7pfX5Tmdn6JJ1GHLoXdUhqaFeJ"
 );
 
 export const TOKEN_PRESALE_HARDCAP = 111111111111; // token
