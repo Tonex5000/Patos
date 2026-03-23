@@ -128,7 +128,7 @@ const PresaleSection = () => {
         const chain = devMode ? sepolia : mainnet;
         return createPublicClient({
             chain,
-            transport: http()
+            transport: http("https://eth-mainnet.g.alchemy.com/v2/EwWTbSOeruRkG_WlIGicc")
         });
     }, []);
 
@@ -136,7 +136,7 @@ const PresaleSection = () => {
         const chain = devMode ? bscTestnet : bsc;
         return createPublicClient({
             chain,
-            transport: http()
+            transport: http("https://bnb-mainnet.g.alchemy.com/v2/EwWTbSOeruRkG_WlIGicc")
         });
     }, []);
 
