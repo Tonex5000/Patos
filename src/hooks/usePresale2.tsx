@@ -25,13 +25,17 @@ import {
   ROUND_PRICES
 } from "../constants";
 import { toast } from "react-toastify";
-import { SystemProgram, PublicKey, Connection } from "@solana/web3.js";
+import { SystemProgram, PublicKey, Connection, Transaction } from "@solana/web3.js";
 import { utf8 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { ASSOCIATED_PROGRAM_ID } from "@project-serum/anchor/dist/cjs/utils/token";
 import {config} from "../config";
+import {
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+} from "@solana/spl-token";
 
 export default function usePresale() {
-  const { publicKey, wallet } = useWallet();
+  const { publicKey, wallet, sendTransaction } = useWallet();
   const anchorWallet = useAnchorWallet();
   const { connection } = useConnection();
   const [transactionPending, setTransactionPending] = useState(false);
@@ -251,7 +255,6 @@ export default function usePresale() {
             presaleInfo: presale_info,
             vault: vault_info,
             presaleAuthority: PRESALE_AUTHORITY,
-            buyerAuthority: publicKey,
             buyer: publicKey,
             rent: anchor.web3.SYSVAR_RENT_PUBKEY,
             systemProgram: anchor.web3.SystemProgram.programId,
@@ -367,6 +370,50 @@ export default function usePresale() {
     }
   };
 
+  const createTokenAta = async (mint: PublicKey): Promise<boolean> => {
+    if (!publicKey) {
+      toast.error("Connect your wallet to create a token account.");
+      return false;
+    }
+
+    if (!sendTransaction) {
+      toast.error("Wallet does not support sending transactions.");
+      return false;
+    }
+
+    try {
+      setTransactionPending(true);
+      const associatedTokenAddress = await getAssociatedTokenAddress(mint, publicKey);
+      const accountInfo = await connection.getAccountInfo(associatedTokenAddress);
+
+      if (accountInfo) {
+        toast.info("Associated token account already exists.");
+        return true;
+      }
+
+      const transaction = new Transaction().add(
+        createAssociatedTokenAccountInstruction(
+          publicKey,
+          associatedTokenAddress,
+          publicKey,
+          mint
+        )
+      );
+
+      const signature = await sendTransaction(transaction, connection);
+      await connection.confirmTransaction(signature, "confirmed");
+      toast.success("Associated token account created successfully.");
+      return true;
+    } catch (error: unknown) {
+      console.error(error);
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message);
+      return false;
+    } finally {
+      setTransactionPending(false);
+    }
+  };
+
   const depositToken = async (depositingToken: PublicKey, amount: number): Promise<boolean> => {
     if (program && publicKey) {
       // Validate inputs
@@ -437,6 +484,8 @@ export default function usePresale() {
         setTransactionPending(false);
       }
     }
+
+    return false;
   };
 
   const buyToken = async (amount: number): Promise<boolean> => {
@@ -518,6 +567,8 @@ export default function usePresale() {
         setTransactionPending(false);
       }
     }
+
+    return false;
   };
 
   const buyTokenStable = async (depositingToken: PublicKey, amount: number): Promise<boolean> => {
@@ -604,6 +655,8 @@ export default function usePresale() {
         setTransactionPending(false);
       }
     }
+
+    return false;
   };
 
   const withdrawToken = async (withdrawnToken: PublicKey): Promise<boolean> => {
@@ -666,10 +719,13 @@ export default function usePresale() {
         setTransactionPending(false);
       }
     }
+
+    return false;
   };
 
   return {
     createPresale,
+    createTokenAta,
     depositToken,
     buyToken,
     buyTokenStable,

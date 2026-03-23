@@ -6,7 +6,7 @@ import {
 
 import HomeHeader from '../components/home/HomeHeader';
 import FeaturedInSection from '../components/home/FeaturedInSection';
-import AdminSection from '../components/home/AdminSection';
+import AdminSection from '../components/home/AdminSection1';
 import PresaleSection from '../components/home/PresaleSection';
 import ItIsEasySection from '../components/home/ItIsEasySection';
 import TokenomicsSection from '../components/home/TokenomicsSection';

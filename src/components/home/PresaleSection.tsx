@@ -34,7 +34,7 @@ import {
 } from "../../constants";
 import PRESALE_ABI from "../../config/abis/PRESALE_ABI.json";
 import { IDL } from "../../idl/token_presale";
-import usePresale from "../../hooks/usePresale";
+import usePresale from "../../hooks/usePresale2";
 import { config } from "../../config";
 
 enum PayMethod {
