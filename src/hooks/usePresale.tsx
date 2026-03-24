@@ -209,7 +209,8 @@ export default function usePresale() {
         [utf8.encode(VAULT_SEED), presale_info.toBuffer()],
         program.programId
       );
-
+      
+      console.log("vault_info =", vault_info.toBase58());
       console.log("eagle presale_info = ", presale_info.toBase58());
 
       const bigIntHardcap =
