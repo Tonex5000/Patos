@@ -4,6 +4,7 @@ import NewToCrypto from './pages/NewToCrypto';
 import Terms from './pages/Terms';
 import Listings from './pages/Listings';
 import { ToastContainer } from "react-toastify";
+import AdminWithdraw from './pages/AdminWithdraw';
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Route path='/new-to-crypto' element={<NewToCrypto />} />
         <Route path='/terms' element={<Terms />} />
         <Route path='/listings' element={<Listings />} />
+        <Route path='/admin/withdraw' element={<AdminWithdraw />} />
       </Routes>
       <ToastContainer autoClose={3000} draggableDirection="x" toastStyle={{ backgroundColor: "#ffffff", color: "#000000cc" }} />
       </>
